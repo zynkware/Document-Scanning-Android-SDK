@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.zynksoftware.documentscanner.ui.components.scansurface.ScanSurfaceView
+        android:id="@+id/scanSurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zdc_top_bar_height"
+            android:background="@color/zdc_transparent_black">
+
+            <ImageView
+                android:id="@+id/flashButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:padding="@dimen/zdc_small_padding"
+                android:src="@drawable/zdc_flash_off"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/autoButton"
+                style="@style/ZdcTextView14sp.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/zdc_x_small_padding"
+                android:text="@string/zdc_auto" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/galleryButton"
+            android:layout_width="@dimen/zdc_gallery_button_dimens"
+            android:layout_height="@dimen/zdc_gallery_button_dimens"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="@dimen/zdc_medium_padding"
+            android:layout_marginBottom="@dimen/zdc_medium_padding"
+            android:src="@drawable/zdc_gallery_icon" />
+
+        <View
+            android:id="@+id/cameraCaptureButton"
+            android:layout_width="@dimen/zdc_camera_button_dimens"
+            android:layout_height="@dimen/zdc_camera_button_dimens"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/zdc_xxx_big_padding"
+            android:background="@drawable/camera_button_circle" />
+
+        <TextView
+            android:id="@+id/cancelButton"
+            style="@style/ZdcTextView14sp.White"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/zdc_gallery_button_dimens"
+            android:layout_alignStart="@+id/cameraCaptureButton"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/zdc_medium_padding"
+            android:layout_marginBottom="@dimen/zdc_medium_padding"
+            android:gravity="center"
+            android:padding="@dimen/zdc_x_small_padding"
+            android:text="@string/zdc_cancel" />
+
+        <com.zynksoftware.documentscanner.ui.components.ProgressView
+            android:id="@+id/progressLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+</FrameLayout>

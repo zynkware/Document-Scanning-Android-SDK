@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="zdc_button_stroke">2dp</dimen>
+    <dimen name="zdc_corner_radius_small">10dp</dimen>
+
+    <dimen name="zdc_text_size_small">12sp</dimen>
+    <dimen name="zdc_text_size_medium_small">14sp</dimen>
+    <dimen name="zdc_text_size_big">18sp</dimen>
+    <dimen name="zdc_button_height">50dp</dimen>
+
+    <dimen name="zdc_next_arrow_padding">80dp</dimen>
+    <dimen name="zdc_xxx_big_padding">40dp</dimen>
+    <dimen name="zdc_medium_padding">20dp</dimen>
+    <dimen name="zdc_small_padding">12dp</dimen>
+    <dimen name="zdc_x_small_padding">10dp</dimen>
+    <dimen name="zdc_xx_small_padding">8dp</dimen>
+
+    <dimen name="zdc_logo_image">100dp</dimen>
+    <dimen name="zdc_separator_thickness">0.5dp</dimen>
+    <dimen name="zdc_no_dimension">0dp</dimen>
+    <dimen name="zdc_corner_radius_big">15dp</dimen>
+    <dimen name="zdc_top_bar_height">50dp</dimen>
+    <dimen name="zdc_image_view_icons_dimens">40dp</dimen>
+    <dimen name="zdc_polygon_dimens">32dp</dimen>
+    <dimen name="zdc_polygon_point_stroke_width">1dp</dimen>
+    <dimen name="zdc_polygon_line_stroke_width">1dp</dimen>
+    <dimen name="zdc_camera_stroke_width">4dp</dimen>
+    <dimen name="zdc_point_padding">20dp</dimen>
+    <dimen name="zdc_camera_button_dimens">50dp</dimen>
+    <dimen name="zdc_gallery_button_dimens">40dp</dimen>
+    <dimen name="zdc_negative_padding_camera">-20dp</dimen>
+
+</resources>

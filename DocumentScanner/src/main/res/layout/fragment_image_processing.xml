@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomBar"
+        android:background="@android:color/black">
+
+        <ImageView
+            android:id="@+id/imagePreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"/>
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zdc_top_bar_height"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:id="@+id/closeButton"
+            android:layout_width="@dimen/zdc_image_view_icons_dimens"
+            android:layout_height="@dimen/zdc_image_view_icons_dimens"
+            android:padding="@dimen/zdc_x_small_padding"
+            android:layout_marginStart="@dimen/zdc_medium_padding"
+            android:layout_centerVertical="true"
+            android:src="@drawable/iconclose"/>
+
+        <ImageView
+            android:id="@+id/magicButton"
+            android:layout_width="@dimen/zdc_image_view_icons_dimens"
+            android:layout_height="@dimen/zdc_image_view_icons_dimens"
+            android:layout_toEndOf="@+id/closeButton"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/zdc_xxx_big_padding"
+            android:padding="@dimen/zdc_x_small_padding"
+            android:src="@drawable/zdc_magic_wand_icon"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/rotateButton"
+            android:layout_width="@dimen/zdc_image_view_icons_dimens"
+            android:layout_height="@dimen/zdc_image_view_icons_dimens"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/zdc_xxx_big_padding"
+            android:padding="@dimen/zdc_xx_small_padding"
+            android:layout_toStartOf="@+id/confirmButton"
+            android:src="@drawable/zdc_rotation_icon"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/confirmButton"
+            android:layout_width="@dimen/zdc_image_view_icons_dimens"
+            android:layout_height="@dimen/zdc_image_view_icons_dimens"
+            android:src="@drawable/zdc_tick_icon"
+            android:padding="@dimen/zdc_xx_small_padding"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/zdc_medium_padding"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+    <com.zynksoftware.documentscanner.ui.components.ProgressView
+        android:id="@+id/progressLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+</RelativeLayout>

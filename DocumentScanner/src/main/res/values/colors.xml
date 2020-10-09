@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="zdc_transparent_black">#99000000</color>
+    <color name="zdc_gray">#afadae</color>
+
+    <color name="zdc_red">#E9001C</color>
+
+    <color name="zdc_white_transparent">#77ffffff</color>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/relativeRoot"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerTwo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomBar"/>
+
+    <RelativeLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zdc_top_bar_height"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:id="@+id/previousButton"
+            android:layout_width="@dimen/zdc_image_view_icons_dimens"
+            android:layout_height="@dimen/zdc_image_view_icons_dimens"
+            android:padding="@dimen/zdc_x_small_padding"
+            android:layout_marginStart="@dimen/zdc_medium_padding"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:src="@drawable/left_arrow"/>
+
+        <ImageView
+            android:id="@+id/nextButton"
+            android:layout_width="@dimen/zdc_image_view_icons_dimens"
+            android:layout_height="@dimen/zdc_image_view_icons_dimens"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/zdc_next_arrow_padding"
+            android:padding="@dimen/zdc_x_small_padding"
+            android:src="@drawable/right_arrow"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+    <com.zynksoftware.documentscanner.ui.components.ProgressView
+        android:id="@+id/progressLayoutApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="zdc_cancel">Cancel</string>
+    <string name="zdc_auto">Auto</string>
+    <string name="zdc_manual">Manual</string>
+</resources>

@@ -1,0 +1,28 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.zynksoftware.documentscanner">
+
+    <uses-feature android:name="android.hardware.camera2" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove"/>
+
+    <application
+        android:requestLegacyExternalStorage="true"
+        android:largeHeap="true"
+        android:hardwareAccelerated="true"
+        tools:ignore="UnusedAttribute">
+
+        <activity
+            android:name=".ui.scan.InternalScanActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme" />
+
+        <activity
+            android:name=".ScanActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme" />
+
+    </application>
+
+</manifest>

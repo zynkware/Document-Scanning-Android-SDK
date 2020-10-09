@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zdc_top_bar_height"
+        android:background="@color/zdc_transparent_black">
+        <TextView
+            android:id="@+id/saveButton"
+            style="@style/ZdcTextView14sp.White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/zdc_x_small_padding"
+            android:text="Save Photo" />
+    </RelativeLayout>
+
+    <com.github.chrisbanes.photoview.PhotoView
+        android:layout_below="@+id/topBar"
+        android:id="@+id/photoImageView"
+        android:background="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

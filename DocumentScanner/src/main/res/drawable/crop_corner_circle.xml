@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <solid android:color="@android:color/transparent" />
+
+    <size
+        android:width="@dimen/zdc_polygon_dimens"
+        android:height="@dimen/zdc_polygon_dimens" />
+
+    <stroke
+        android:width="@dimen/zdc_polygon_point_stroke_width"
+        android:color="@android:color/white" />
+</shape>
