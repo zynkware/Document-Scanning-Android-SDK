@@ -10,23 +10,12 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-def githubProperties = new Properties()
-githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
 
 allprojects {
     repositories {
-        maven { url "https://jitpack.io" }
         google()
         jcenter()
-
-        maven {
-            name = "ZynkwareTinyOpenCV"
-            url = uri("https://maven.pkg.github.com/zynkware/Tiny-OpenCV")
-            credentials {
-                username = githubProperties['gpr.usr']
-                password = githubProperties['gpr.key']
-            }
-        }
+        maven { url "https://jitpack.io" }
     }
 }
 

@@ -45,9 +45,9 @@ android {
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
     google()
     jcenter()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -59,7 +59,7 @@ dependencies {
 
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
-    implementation "com.zynkware:opencv:4.4.0"
+    implementation 'com.github.zynkware:Tiny-OpenCV:4.4.0-4'
 
     implementation "androidx.camera:camera-camera2:1.0.0-beta10"
     implementation "androidx.camera:camera-lifecycle:1.0.0-beta10"
