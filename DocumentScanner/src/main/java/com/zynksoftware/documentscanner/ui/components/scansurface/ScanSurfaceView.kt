@@ -20,10 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 package com.zynksoftware.documentscanner.ui.components.scansurface
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Path
-import android.graphics.drawable.shapes.PathShape
 import android.os.CountDownTimer
 import android.util.AttributeSet
 import android.util.Log
@@ -54,9 +51,8 @@ internal class ScanSurfaceView : FrameLayout {
     companion object {
         private val TAG = ScanSurfaceView::class.simpleName
 
-        private const val TIME_POST_PICTURE = 1000L
-        private const val DEFAULT_TIME_POST_PICTURE = 1000L
-
+        private const val TIME_POST_PICTURE = 1500L
+        private const val DEFAULT_TIME_POST_PICTURE = 1500L
         private const val IMAGE_ANALYSIS_SCALE_WIDTH = 400
     }
 
@@ -99,11 +95,6 @@ internal class ScanSurfaceView : FrameLayout {
 
     private fun clearAndInvalidateCanvas() {
         scanCanvasView.clearShape()
-        invalidateCanvas()
-    }
-
-    private fun invalidateCanvas() {
-        scanCanvasView.invalidate()
     }
 
     private fun openCamera() {
@@ -210,20 +201,8 @@ internal class ScanSurfaceView : FrameLayout {
             if (!isAutoCaptureScheduled) {
                 scheduleAutoCapture()
             }
-            val path = Path()
-
-            //Points are drawn in anticlockwise direction
-            path.moveTo(previewWidth - points[0].y.toFloat(), points[0].x.toFloat())
-            path.lineTo(previewWidth - points[1].y.toFloat(), points[1].x.toFloat())
-            path.lineTo(previewWidth - points[2].y.toFloat(), points[2].x.toFloat())
-            path.lineTo(previewWidth - points[3].y.toFloat(), points[3].x.toFloat())
-            path.close()
-
-            val newBox = PathShape(path, previewWidth, previewHeight)
-            scanCanvasView.showShape(newBox)
+            scanCanvasView.showShape(previewWidth, previewHeight, points)
         }
-
-        invalidateCanvas()
     }
 
     private fun scheduleAutoCapture() {
@@ -239,7 +218,6 @@ internal class ScanSurfaceView : FrameLayout {
             override fun onFinish() {
                 isAutoCaptureScheduled = false
                 autoCapture()
-                Log.v(TAG, "$millisLeft")
             }
         }
         autoCaptureTimer?.start()

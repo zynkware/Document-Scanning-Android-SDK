@@ -19,8 +19,8 @@
 
 package com.zynksoftware.documentscanner.common.utils
 
-import android.content.Context
 import org.opencv.core.Point
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -43,9 +43,7 @@ internal object MathUtils {
     fun getMaxCosine(maxCosine: Double, approxPoints: Array<Point>): Double {
         var newMaxCosine = maxCosine
         for (i in 2..4) {
-            val cosine: Double = Math.abs(
-                angle(approxPoints[i % 4], approxPoints[i - 2], approxPoints[i - 1])
-            )
+            val cosine: Double = abs(angle(approxPoints[i % 4], approxPoints[i - 2], approxPoints[i - 1]))
             newMaxCosine = max(cosine, newMaxCosine)
         }
         return newMaxCosine

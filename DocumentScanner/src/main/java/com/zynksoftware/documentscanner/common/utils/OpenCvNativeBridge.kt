@@ -38,13 +38,13 @@ internal class OpenCvNativeBridge {
         private const val ANGLES_NUMBER = 4
         private const val EPSILON_CONSTANT = 0.02
         private const val CLOSE_KERNEL_SIZE = 10.0
-        private const val CANNY_THRESHOLD_LOW = 85.0
-        private const val CANNY_THRESHOLD_HIGH = 185.0
+        private const val CANNY_THRESHOLD_LOW = 75.0
+        private const val CANNY_THRESHOLD_HIGH = 200.0
         private const val CUTOFF_THRESHOLD = 155.0
         private const val TRUNCATE_THRESHOLD = 150.0
         private const val NORMALIZATION_MIN_VALUE = 0.0
         private const val NORMALIZATION_MAX_VALUE = 255.0
-        private const val BLURRING_KERNEL_SIZE = 3.0
+        private const val BLURRING_KERNEL_SIZE = 5.0
         private const val DOWNSCALE_IMAGE_SIZE = 600.0
         private const val FIRST_MAX_CONTOURS = 10
     }

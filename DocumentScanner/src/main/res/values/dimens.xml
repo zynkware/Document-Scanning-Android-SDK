@@ -24,7 +24,7 @@
     <dimen name="zdc_image_view_icons_dimens">40dp</dimen>
     <dimen name="zdc_polygon_dimens">32dp</dimen>
     <dimen name="zdc_polygon_point_stroke_width">1dp</dimen>
-    <dimen name="zdc_polygon_line_stroke_width">1dp</dimen>
+    <dimen name="zdc_polygon_line_stroke_width">2dp</dimen>
     <dimen name="zdc_camera_stroke_width">4dp</dimen>
     <dimen name="zdc_point_padding">20dp</dimen>
     <dimen name="zdc_camera_button_dimens">50dp</dimen>

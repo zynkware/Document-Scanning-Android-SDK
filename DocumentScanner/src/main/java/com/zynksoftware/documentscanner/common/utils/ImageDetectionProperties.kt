@@ -31,7 +31,7 @@ internal class ImageDetectionProperties(
 ) {
 
     companion object {
-        private const val SMALLEST_ANGLE_COS = 0.25881905 //75 degrees
+        private const val SMALLEST_ANGLE_COS = 0.172 //80 degrees
     }
 
     fun isNotValidImage(approx: MatOfPoint2f): Boolean {
