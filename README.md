@@ -116,7 +116,11 @@ All errors are returned to app using `fun onError(error: DocumentScannerErrorMod
 	* imageType can be Bitmap.CompressFormat.JPEG, Bitmap.CompressFormat.PNG or Bitmap.CompressFormat.WEBP
 	* Default value is Bitmap.CompressFormat.JPEG
 
-
+## Thanks
+* [OpenCV](https://opencv.org)
+* [Compressor](https://github.com/zetbaitsu/Compressor)
+* [RxPermissions](https://github.com/tbruyelle/RxPermissions)
+* Inspiration from [mayuce](https://github.com/mayuce/AndroidDocumentScanner), [adityaarora1](https://github.com/adityaarora1/LiveEdgeDetection) and [hannesa2](https://github.com/hannesa2/LiveEdgeDetection)
 
 
 ## License
