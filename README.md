@@ -27,9 +27,30 @@
 
 ### Installation
 
-TODO
+in root project build.gradle:
 
+	allprojects {
+	    repositories {
+		...
+		maven { url "https://jitpack.io" }
+	    }
+	}
+	
+in app build.gradle:
 
+	android {
+	    ...
+	    compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	    }
+	}
+	
+	dependencies {
+    	    ...
+	    implementation 'com.github.zynkware:Document-Scanning-Android-SDK:1.0.0'
+	}
+	
 ### Usage
 
 #### Initialization
@@ -40,10 +61,10 @@ In your Application class:
         override fun onCreate() {  
             ...
             val configuration = DocumentScanner.Configuration()  
-			configuration.imageQuality = 100  
-			configuration.imageSize = 1000000 // 1 MB  
-			configuration.imageType = Bitmap.CompressFormat.JPEG  
-			DocumentScanner.init(this, configuration)
+	    	configuration.imageQuality = 100  
+	    	configuration.imageSize = 1000000 // 1 MB  
+	    	configuration.imageType = Bitmap.CompressFormat.JPEG  
+	    	DocumentScanner.init(this, configuration) // or simply DocumentScanner.init(this)
         }   
     }
 
