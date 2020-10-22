@@ -52,5 +52,6 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
 
-    implementation project(":DocumentScanner")
+    implementation 'com.github.zynkware:Document-Scanning-Android-SDK:1.0.0'
+//    implementation project(":DocumentScanner")
 }
