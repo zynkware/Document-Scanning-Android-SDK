@@ -1,10 +1,19 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'maven-publish'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group="com.zynkware"
 
 def libraryVersionCode = 4
 def libraryVersionName = "1.0.0"
+
+repositories {
+    mavenCentral()
+    google()
+    jcenter()
+    maven { url "https://jitpack.io" }
+}
 
 android {
     compileSdkVersion 29
@@ -81,32 +90,4 @@ task sourceJar(type: Jar) {
 task androidSourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs
-}
-
-def githubProperties = new Properties()
-githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                artifact androidSourcesJar
-
-                groupId 'com.zynkware'
-                artifactId 'document-scanning'
-                version libraryVersionName
-            }
-        }
-        repositories {
-            maven {
-                name = "ZynkwareDocumentScanning"
-//                url = uri("https://maven.pkg.github.com/zynkware/Document-Scanning-Android-SDK")
-//                credentials {
-//                    username = githubProperties['gpr.usr']
-//                    password = githubProperties['gpr.key']
-//                }
-            }
-        }
-    }
 }
