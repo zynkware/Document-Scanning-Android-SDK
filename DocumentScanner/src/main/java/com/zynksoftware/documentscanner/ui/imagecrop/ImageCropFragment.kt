@@ -26,6 +26,7 @@ import android.graphics.PointF
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -68,7 +69,7 @@ internal class ImageCropFragment : BaseFragment() {
         } else {
             Log.e(TAG, DocumentScannerErrorModel.ErrorMessage.INVALID_IMAGE.error)
             onError(DocumentScannerErrorModel(DocumentScannerErrorModel.ErrorMessage.INVALID_IMAGE))
-            Handler().post{
+            Handler(Looper.getMainLooper()).post{
                 closeFragment()
             }
         }

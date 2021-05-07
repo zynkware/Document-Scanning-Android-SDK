@@ -25,6 +25,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +47,7 @@ internal class ScanCanvasView : FrameLayout {
 
     private var paint = Paint()
     private var border = Paint()
-    private val handlerClear = Handler()
+    private val handlerClear = Handler(Looper.getMainLooper())
 
     private var shouldAnimate = true
 
