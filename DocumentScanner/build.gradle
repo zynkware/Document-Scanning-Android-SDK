@@ -2,11 +2,17 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 
 group="com.zynkware"
 
 def libraryVersionCode = 6
 def libraryVersionName = "1.1.0"
+def libraryGroup = "com.github.zynkware"
+def libraryArtifact = "Document-Scanning-Android-SDK"
+
+group = libraryGroup
+version = libraryVersionName
 
 repositories {
     mavenCentral()
@@ -87,4 +93,17 @@ task sourceJar(type: Jar) {
 task androidSourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = libraryGroup
+                artifactId = libraryArtifact
+                version = libraryVersionName
+            }
+        }
+    }
 }
