@@ -48,7 +48,7 @@ in app build.gradle:
 	
 	dependencies {
     	    ...
-	    implementation 'com.github.zynkware:Document-Scanning-Android-SDK:1.0.1'
+	    implementation 'com.github.zynkware:Document-Scanning-Android-SDK:1.1.1'
 	}
 	
 ### Usage
