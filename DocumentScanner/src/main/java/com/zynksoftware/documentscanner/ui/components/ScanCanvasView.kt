@@ -51,10 +51,10 @@ internal class ScanCanvasView : FrameLayout {
 
     private var shouldAnimate = true
 
-    var pointer1: View = View(context)
-    var pointer2: View = View(context)
-    var pointer3: View = View(context)
-    var pointer4: View = View(context)
+    private var pointer1: View = View(context)
+    private var pointer2: View = View(context)
+    private var pointer3: View = View(context)
+    private var pointer4: View = View(context)
 
     init {
         paint.color = ContextCompat.getColor(context, R.color.zdc_white_transparent)
@@ -114,8 +114,8 @@ internal class ScanCanvasView : FrameLayout {
         }
     }
 
-    var previewWidth: Float? = null
-    var previewHeight: Float? = null
+    private var previewWidth: Float? = null
+    private var previewHeight: Float? = null
 
     fun showShape(previewWidth: Float, previewHeight: Float, points: Array<Point>) {
         this.previewWidth = previewWidth

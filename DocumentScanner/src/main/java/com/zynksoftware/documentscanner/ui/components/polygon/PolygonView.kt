@@ -26,6 +26,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -133,17 +134,22 @@ internal class PolygonView @JvmOverloads constructor(
     }
 
     private fun setPointsCoordinates(pointFMap: Map<Int, PointF>) {
-        pointer1.x = pointFMap.getValue(0).x - pointPadding
-        pointer1.y = pointFMap.getValue(0).y - pointPadding
+        try {
+            pointer1.x = pointFMap.getValue(0).x - pointPadding
+            pointer1.y = pointFMap.getValue(0).y - pointPadding
 
-        pointer2.x = pointFMap.getValue(1).x - pointPadding
-        pointer2.y = pointFMap.getValue(1).y - pointPadding
+            pointer2.x = pointFMap.getValue(1).x - pointPadding
+            pointer2.y = pointFMap.getValue(1).y - pointPadding
 
-        pointer3.x = pointFMap.getValue(2).x - pointPadding
-        pointer3.y = pointFMap.getValue(2).y - pointPadding
+            pointer3.x = pointFMap.getValue(2).x - pointPadding
+            pointer3.y = pointFMap.getValue(2).y - pointPadding
 
-        pointer4.x = pointFMap.getValue(3).x - pointPadding
-        pointer4.y = pointFMap.getValue(3).y - pointPadding
+            pointer4.x = pointFMap.getValue(3).x - pointPadding
+            pointer4.y = pointFMap.getValue(3).y - pointPadding
+        } catch (exception: NoSuchElementException) {
+            // avoid crash if there is no point to add to image
+            Log.e(TAG, "", exception)
+        }
     }
 
     override fun dispatchDraw(canvas: Canvas) {

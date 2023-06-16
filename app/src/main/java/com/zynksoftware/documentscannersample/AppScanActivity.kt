@@ -13,7 +13,10 @@ import android.os.Environment.DIRECTORY_DCIM
 import android.provider.MediaStore
 import android.util.Log
 import androidx.core.view.isVisible
-import com.tbruyelle.rxpermissions3.RxPermissions
+import com.fondesa.kpermissions.allGranted
+import com.fondesa.kpermissions.allShouldShowRationale
+import com.fondesa.kpermissions.extension.permissionsBuilder
+import com.fondesa.kpermissions.extension.send
 import com.zynksoftware.documentscanner.ScanActivity
 import com.zynksoftware.documentscanner.model.DocumentScannerErrorModel
 import com.zynksoftware.documentscanner.model.ScannerResults
@@ -63,21 +66,37 @@ class AppScanActivity: ScanActivity(), ImageAdapterListener {
     }
 
     private fun checkForStoragePermissions(image: File) {
-        RxPermissions(this)
-            .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-            .subscribe { permission ->
-                when {
-                    permission.granted -> {
-                        saveImage(image)
-                    }
-                    permission.shouldShowRequestPermissionRationale -> {
-                        onError(DocumentScannerErrorModel(DocumentScannerErrorModel.ErrorMessage.STORAGE_PERMISSION_REFUSED_WITHOUT_NEVER_ASK_AGAIN))
-                    }
-                    else -> {
-                        onError(DocumentScannerErrorModel(DocumentScannerErrorModel.ErrorMessage.STORAGE_PERMISSION_REFUSED_GO_TO_SETTINGS))
-                    }
+        permissionsBuilder(getWriteStoragePermission(), getReadStoragePermission())
+            .build()
+            .send { result ->
+                if (result.allGranted()) {
+                    saveImage(image)
+                } else if(result.allShouldShowRationale()) {
+                    onError(DocumentScannerErrorModel(DocumentScannerErrorModel.ErrorMessage.STORAGE_PERMISSION_REFUSED_WITHOUT_NEVER_ASK_AGAIN))
+                } else {
+                    onError(DocumentScannerErrorModel(DocumentScannerErrorModel.ErrorMessage.STORAGE_PERMISSION_REFUSED_GO_TO_SETTINGS))
                 }
             }
+    }
+
+    private fun getWriteStoragePermission(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Manifest.permission.ACCESS_MEDIA_LOCATION
+        } else {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        }
+    }
+
+    private fun getReadStoragePermission(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Manifest.permission.ACCESS_MEDIA_LOCATION
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+        }
     }
 
     private fun saveImage(image: File) {
