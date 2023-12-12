@@ -128,6 +128,7 @@ internal class ImageProcessingFragment : BaseFragment() {
                     getScanActivity().runOnUiThread {
                         hideProgressBar()
                         imagePreview.setImageBitmap(getScanActivity().croppedImage)
+                        getScanActivity().transformedImage = null
                     }
                 }
                 isInverted = !isInverted
