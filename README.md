@@ -26,32 +26,32 @@ of [OpenCV](https://opencv.org).
 
 ## Getting started
 
-**Document Scanner**  is supported on Android devices starting from **SDK 21 (Lollipop)**
+**Document Scanner**  is supported on Android devices starting from **SDK 23 (Marshmallow)**.
 
 ### Installation
 
 in root project build.gradle:
 
 	allprojects {
-	    repositories {
-		...
-		maven { url "https://jitpack.io" }
+        repositories {
+		    ...
+		    maven(url = "https://jitpack.io")
 	    }
 	}
 
 in app build.gradle:
 
 	android {
-	    ...
-	    compileOptions {
-		sourceCompatibility JavaVersion.VERSION_1_8
-		targetCompatibility JavaVersion.VERSION_1_8
-	    }
+      ...
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        }
 	}
 	
 	dependencies {
-    	    ...
-	    implementation 'com.github.Hazzatur:Document-Scanning-Android-SDK:1.1.3'
+      ...
+      implementation("com.github.Hazzatur:Document-Scanning-Android-SDK:1.1.3")
 	}
 
 ### Usage

@@ -47,7 +47,8 @@ import java.io.FileNotFoundException
 
 
 internal class CameraScreenFragment : BaseFragment(), ScanSurfaceListener {
-    private lateinit var binding: FragmentCameraScreenBinding
+    private var _binding: FragmentCameraScreenBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         private val TAG = CameraScreenFragment::class.simpleName
@@ -108,8 +109,13 @@ internal class CameraScreenFragment : BaseFragment(), ScanSurfaceListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCameraScreenBinding.inflate(inflater, container, false)
+        _binding = FragmentCameraScreenBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

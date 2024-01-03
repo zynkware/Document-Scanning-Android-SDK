@@ -43,7 +43,8 @@ import com.zynksoftware.documentscanner.ui.scan.InternalScanActivity
 import id.zelory.compressor.determineImageRotation
 
 internal class ImageCropFragment : BaseFragment() {
-    private lateinit var binding: FragmentImageCropBinding
+    private var _binding: FragmentImageCropBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         private val TAG = ImageCropFragment::class.simpleName
@@ -62,8 +63,13 @@ internal class ImageCropFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentImageCropBinding.inflate(inflater, container, false)
+        _binding = FragmentImageCropBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

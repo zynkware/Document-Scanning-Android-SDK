@@ -40,7 +40,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 internal class ImageProcessingFragment : BaseFragment() {
-    private lateinit var binding: FragmentImageProcessingBinding
+    private var _binding: FragmentImageProcessingBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         private val TAG = ImageProcessingFragment::class.simpleName
@@ -58,8 +59,13 @@ internal class ImageProcessingFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentImageProcessingBinding.inflate(inflater, container, false)
+        _binding = FragmentImageProcessingBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
