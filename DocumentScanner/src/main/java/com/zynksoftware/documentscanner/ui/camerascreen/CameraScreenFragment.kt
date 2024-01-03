@@ -1,20 +1,20 @@
 /**
-    Copyright 2020 ZynkSoftware SRL
+Copyright 2020 ZynkSoftware SRL
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
-    associated documentation files (the "Software"), to deal in the Software without restriction,
-    including without limitation the rights to use, copy, modify, merge, publish, distribute,
-    sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-    The above copyright notice and this permission notice shall be included in all copies or
-    substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-    INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package com.zynksoftware.documentscanner.ui.camerascreen
@@ -37,16 +37,17 @@ import com.zynksoftware.documentscanner.R
 import com.zynksoftware.documentscanner.common.extensions.hide
 import com.zynksoftware.documentscanner.common.extensions.show
 import com.zynksoftware.documentscanner.common.utils.FileUriUtils
+import com.zynksoftware.documentscanner.databinding.FragmentCameraScreenBinding
 import com.zynksoftware.documentscanner.model.DocumentScannerErrorModel
 import com.zynksoftware.documentscanner.ui.base.BaseFragment
 import com.zynksoftware.documentscanner.ui.components.scansurface.ScanSurfaceListener
 import com.zynksoftware.documentscanner.ui.scan.InternalScanActivity
-import kotlinx.android.synthetic.main.fragment_camera_screen.*
 import java.io.File
 import java.io.FileNotFoundException
 
 
-internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
+internal class CameraScreenFragment : BaseFragment(), ScanSurfaceListener {
+    private lateinit var binding: FragmentCameraScreenBinding
 
     companion object {
         private val TAG = CameraScreenFragment::class.simpleName
@@ -56,44 +57,67 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
         }
     }
 
-    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            try {
-                val imageUri = result?.data?.data
-                if (imageUri != null) {
-                    val realPath = FileUriUtils.getRealPath(getScanActivity(), imageUri)
-                    if (realPath != null) {
-                        getScanActivity().reInitOriginalImageFile()
-                        getScanActivity().originalImageFile = File(realPath)
-                        startCroppingProcess()
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                try {
+                    val imageUri = result?.data?.data
+                    if (imageUri != null) {
+                        val realPath = FileUriUtils.getRealPath(getScanActivity(), imageUri)
+                        if (realPath != null) {
+                            getScanActivity().reInitOriginalImageFile()
+                            getScanActivity().originalImageFile = File(realPath)
+                            startCroppingProcess()
+                        } else {
+                            Log.e(
+                                TAG,
+                                DocumentScannerErrorModel.ErrorMessage.TAKE_IMAGE_FROM_GALLERY_ERROR.error
+                            )
+                            onError(
+                                DocumentScannerErrorModel(
+                                    DocumentScannerErrorModel.ErrorMessage.TAKE_IMAGE_FROM_GALLERY_ERROR,
+                                    null
+                                )
+                            )
+                        }
                     } else {
-                        Log.e(TAG, DocumentScannerErrorModel.ErrorMessage.TAKE_IMAGE_FROM_GALLERY_ERROR.error)
-                        onError(DocumentScannerErrorModel(
-                            DocumentScannerErrorModel.ErrorMessage.TAKE_IMAGE_FROM_GALLERY_ERROR, null))
+                        Log.e(
+                            TAG,
+                            DocumentScannerErrorModel.ErrorMessage.TAKE_IMAGE_FROM_GALLERY_ERROR.error
+                        )
+                        onError(
+                            DocumentScannerErrorModel(
+                                DocumentScannerErrorModel.ErrorMessage.TAKE_IMAGE_FROM_GALLERY_ERROR,
+                                null
+                            )
+                        )
                     }
-                } else {
-                    Log.e(TAG, DocumentScannerErrorModel.ErrorMessage.TAKE_IMAGE_FROM_GALLERY_ERROR.error)
-                    onError(DocumentScannerErrorModel(
-                        DocumentScannerErrorModel.ErrorMessage.TAKE_IMAGE_FROM_GALLERY_ERROR, null))
+                } catch (e: FileNotFoundException) {
+                    Log.e(TAG, "FileNotFoundException", e)
+                    onError(
+                        DocumentScannerErrorModel(
+                            DocumentScannerErrorModel.ErrorMessage.TAKE_IMAGE_FROM_GALLERY_ERROR, e
+                        )
+                    )
                 }
-            } catch (e: FileNotFoundException) {
-                Log.e(TAG, "FileNotFoundException", e)
-                onError(DocumentScannerErrorModel(
-                    DocumentScannerErrorModel.ErrorMessage.TAKE_IMAGE_FROM_GALLERY_ERROR, e))
             }
         }
-    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_camera_screen, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentCameraScreenBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        scanSurfaceView.lifecycleOwner = this
-        scanSurfaceView.listener = this
-        scanSurfaceView.originalImageFile = getScanActivity().originalImageFile
+        binding.scanSurfaceView.lifecycleOwner = this
+        binding.scanSurfaceView.listener = this
+        binding.scanSurfaceView.originalImageFile = getScanActivity().originalImageFile
 
         checkForCameraPermissions()
         initListeners()
@@ -101,7 +125,7 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(getScanActivity().shouldCallOnClose) {
+        if (getScanActivity().shouldCallOnClose) {
             getScanActivity().onClose()
         }
     }
@@ -109,33 +133,33 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
     override fun onResume() {
         super.onResume()
         getScanActivity().reInitOriginalImageFile()
-        scanSurfaceView.originalImageFile = getScanActivity().originalImageFile
+        binding.scanSurfaceView.originalImageFile = getScanActivity().originalImageFile
     }
 
     private fun initListeners() {
-        cameraCaptureButton.setOnClickListener {
+        binding.cameraCaptureButton.setOnClickListener {
             takePhoto()
         }
-        cancelButton.setOnClickListener {
+        binding.cancelButton.setOnClickListener {
             finishActivity()
         }
-        flashButton.setOnClickListener {
+        binding.flashButton.setOnClickListener {
             switchFlashState()
         }
-        galleryButton.setOnClickListener {
+        binding.galleryButton.setOnClickListener {
             checkForStoragePermissions()
         }
-        autoButton.setOnClickListener {
+        binding.autoButton.setOnClickListener {
             toggleAutoManualButton()
         }
     }
 
     private fun toggleAutoManualButton() {
-        scanSurfaceView.isAutoCaptureOn = !scanSurfaceView.isAutoCaptureOn
-        if (scanSurfaceView.isAutoCaptureOn) {
-            autoButton.text = getString(R.string.zdc_auto)
+        binding.scanSurfaceView.isAutoCaptureOn = !binding.scanSurfaceView.isAutoCaptureOn
+        if (binding.scanSurfaceView.isAutoCaptureOn) {
+            binding.autoButton.text = getString(R.string.zdc_auto)
         } else {
-            autoButton.text = getString(R.string.zdc_manual)
+            binding.autoButton.text = getString(R.string.zdc_manual)
         }
     }
 
@@ -145,7 +169,7 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
             .send { result ->
                 if (result.allGranted()) {
                     startCamera()
-                } else if(result.allShouldShowRationale()) {
+                } else if (result.allShouldShowRationale()) {
                     onError(DocumentScannerErrorModel(DocumentScannerErrorModel.ErrorMessage.CAMERA_PERMISSION_REFUSED_WITHOUT_NEVER_ASK_AGAIN))
                 } else {
                     onError(DocumentScannerErrorModel(DocumentScannerErrorModel.ErrorMessage.CAMERA_PERMISSION_REFUSED_GO_TO_SETTINGS))
@@ -176,11 +200,11 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
     }
 
     private fun startCamera() {
-        scanSurfaceView.start()
+        binding.scanSurfaceView.start()
     }
 
     private fun takePhoto() {
-        scanSurfaceView.takePicture()
+        binding.scanSurfaceView.takePicture()
     }
 
     private fun getScanActivity(): InternalScanActivity {
@@ -192,15 +216,15 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
     }
 
     private fun switchFlashState() {
-        scanSurfaceView.switchFlashState()
+        binding.scanSurfaceView.switchFlashState()
     }
 
     override fun showFlash() {
-        flashButton?.show()
+        binding.flashButton.show()
     }
 
     override fun hideFlash() {
-        flashButton?.hide()
+        binding.flashButton.hide()
     }
 
     private fun selectImageFromGallery() {
@@ -229,16 +253,16 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
     }
 
     override fun onError(error: DocumentScannerErrorModel) {
-        if(isAdded) {
+        if (isAdded) {
             getScanActivity().onError(error)
         }
     }
 
     override fun showFlashModeOn() {
-        flashButton.setImageResource(R.drawable.zdc_flash_on)
+        binding.flashButton.setImageResource(R.drawable.zdc_flash_on)
     }
 
     override fun showFlashModeOff() {
-        flashButton.setImageResource(R.drawable.zdc_flash_off)
+        binding.flashButton.setImageResource(R.drawable.zdc_flash_off)
     }
 }

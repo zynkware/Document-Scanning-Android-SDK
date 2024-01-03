@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
 }
 
 android {
@@ -40,6 +41,10 @@ android {
             manifest.srcFile("src/main/AndroidManifest.xml")
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 tasks.register<Jar>("sourceJar") {
@@ -51,6 +56,19 @@ tasks.register<Jar>("sourceJar") {
 tasks.register<Jar>("androidSourcesJar") {
     archiveClassifier.set("sources")
     from(android.sourceSets["main"].java.srcDirs)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create("release", MavenPublication::class) {
+                from(components["release"])
+                groupId = "com.github.hazzatur"
+                artifactId = "Document-Scanning-Android-SDK"
+                version = "1.1.3"
+            }
+        }
+    }
 }
 
 dependencies {
@@ -73,4 +91,7 @@ dependencies {
     implementation("androidx.exifinterface:exifinterface:1.3.7")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     implementation("id.zelory:compressor:3.0.1")
+    implementation("androidx.test:monitor:1.6.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
 }

@@ -53,11 +53,13 @@ internal class PolygonPointImageView @JvmOverloads constructor(
                         startPoint = PointF(x, y)
                     }
                 }
+
                 MotionEvent.ACTION_DOWN -> {
                     downPoint.x = event.x
                     downPoint.y = event.y
                     startPoint = PointF(x, y)
                 }
+
                 MotionEvent.ACTION_UP -> {
                     performClick()
                 }

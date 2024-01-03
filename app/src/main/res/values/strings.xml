@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">DocumentScannerSample</string>
+    <string name="app_name" translatable="false">DocumentScannerSample</string>
     <string name="ok_label">OK</string>
     <string name="error_label">Error</string>
     <string name="photo_saved">Photo has been saved to Camera</string>
+    <string name="save_photo">Save Photo</string>
+    <string name="scan_lib">Scan Lib</string>
 </resources>

@@ -10,12 +10,18 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.zynksoftware.documentscannersample.R
 import java.io.File
 
-class ImageViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val photoImageView = itemView.findViewById<PhotoView>(R.id.photoImageView)
     private val saveButton = itemView.findViewById<TextView>(R.id.saveButton)
 
-    fun bindData(context: Context?, image: File, listener: ImageAdapterListener, position: Int, size: Int) {
+    fun bindData(
+        context: Context?,
+        image: File,
+        listener: ImageAdapterListener,
+        position: Int,
+        size: Int
+    ) {
         photoImageView.setImageFile(image)
         saveButton.setOnClickListener {
             listener.onSaveButtonClicked(image)

@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/zdc_top_bar_height"
         android:background="@color/zdc_transparent_black">
+
         <TextView
             android:id="@+id/saveButton"
             style="@style/ZdcTextView14sp.White"
@@ -17,14 +18,14 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:padding="@dimen/zdc_x_small_padding"
-            android:text="Save Photo" />
+            android:text="@string/save_photo" />
     </RelativeLayout>
 
     <com.github.chrisbanes.photoview.PhotoView
-        android:layout_below="@+id/topBar"
         android:id="@+id/photoImageView"
-        android:background="@android:color/black"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topBar"
+        android:background="@android:color/black" />
 
 </RelativeLayout>

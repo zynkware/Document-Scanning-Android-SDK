@@ -4,7 +4,6 @@ import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
@@ -35,10 +34,8 @@ internal object FileUriUtils {
 
     private fun getPathFromLocalUri(context: Context, uri: Uri): String? {
 
-        val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-
         // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+        if (DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
                 val docId = DocumentsContract.getDocumentId(uri)
@@ -64,7 +61,8 @@ internal object FileUriUtils {
             } else if (isDownloadsDocument(uri)) {
                 val fileName = getFilePath(context, uri)
                 if (fileName != null) {
-                    return Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName
+                    return Environment.getExternalStorageDirectory()
+                        .toString() + "/Download/" + fileName
                 }
 
                 val id = DocumentsContract.getDocumentId(uri)
@@ -78,12 +76,10 @@ internal object FileUriUtils {
                 val type = split[0]
 
                 var contentUri: Uri? = null
-                if ("image" == type) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                } else if ("video" == type) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                } else if ("audio" == type) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                when (type) {
+                    "image" -> contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    "video" -> contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                    "audio" -> contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                 }
 
                 val selection = "_id=?"
@@ -95,7 +91,12 @@ internal object FileUriUtils {
         } else if ("content".equals(uri.scheme!!, ignoreCase = true)) {
 
             // Return the remote address
-            return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(context, uri, null, null)
+            return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(
+                context,
+                uri,
+                null,
+                null
+            )
         } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
             return uri.path
         } // File
@@ -116,12 +117,13 @@ internal object FileUriUtils {
         val projection = arrayOf(column)
 
         try {
-            cursor = context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
+            cursor =
+                context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
             if (cursor != null && cursor.moveToFirst()) {
                 val index = cursor.getColumnIndexOrThrow(column)
                 return cursor.getString(index)
             }
-        } catch (ex: Exception) {
+        } catch (_: Exception) {
         } finally {
             cursor?.close()
         }
@@ -155,7 +157,7 @@ internal object FileUriUtils {
             val extension = getImageExtension(uri)
             inputStream = context.contentResolver.openInputStream(uri)
             val storageDir = context.cacheDir
-            if (!storageDir.exists())  {
+            if (!storageDir.exists()) {
                 storageDir.mkdirs()
             }
             file = File(storageDir, "remotePicture${extension}")
@@ -198,7 +200,7 @@ internal object FileUriUtils {
             extension = null
         }
 
-        if (extension == null || extension.isEmpty()) {
+        if (extension.isNullOrEmpty()) {
             // default extension for matches the previous behavior of the plugin
             extension = "jpg"
         }

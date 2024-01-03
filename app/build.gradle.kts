@@ -59,7 +59,5 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxandroid:3.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
-
-    implementation("com.github.Hazzatur:Document-Scanning-Android-SDK:1.1.2")
     implementation(project(":DocumentScanner"))
 }

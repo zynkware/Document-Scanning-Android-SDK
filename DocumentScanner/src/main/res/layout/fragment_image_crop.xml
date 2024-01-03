@@ -18,10 +18,10 @@
 
             <ImageView
                 android:id="@+id/imagePreview"
-                android:adjustViewBounds="true"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true" />
 
         </FrameLayout>
 
@@ -37,27 +37,27 @@
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/zdc_top_bar_height"
-        android:background="@android:color/white"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white">
 
         <ImageView
             android:id="@+id/closeButton"
             android:layout_width="@dimen/zdc_image_view_icons_dimens"
             android:layout_height="@dimen/zdc_image_view_icons_dimens"
-            android:padding="@dimen/zdc_x_small_padding"
-            android:layout_marginStart="@dimen/zdc_medium_padding"
             android:layout_centerVertical="true"
-            android:src="@drawable/iconclose"/>
+            android:layout_marginStart="@dimen/zdc_medium_padding"
+            android:padding="@dimen/zdc_x_small_padding"
+            android:src="@drawable/icon_close" />
 
         <ImageView
             android:id="@+id/confirmButton"
             android:layout_width="@dimen/zdc_image_view_icons_dimens"
             android:layout_height="@dimen/zdc_image_view_icons_dimens"
-            android:src="@drawable/zdc_tick_icon"
-            android:padding="@dimen/zdc_xx_small_padding"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/zdc_medium_padding"
-            android:layout_alignParentEnd="true"/>
+            android:padding="@dimen/zdc_xx_small_padding"
+            android:src="@drawable/zdc_tick_icon" />
     </RelativeLayout>
 
 </RelativeLayout>

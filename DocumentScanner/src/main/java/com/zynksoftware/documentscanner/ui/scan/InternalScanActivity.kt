@@ -44,6 +44,7 @@ import id.zelory.compressor.constraint.quality
 import id.zelory.compressor.constraint.size
 import id.zelory.compressor.extension
 import id.zelory.compressor.saveBitmap
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -57,7 +58,7 @@ abstract class InternalScanActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = InternalScanActivity::class.simpleName
-        internal const val CAMERA_SCREEN_FRAGMENT_TAG =  "CameraScreenFragmentTag"
+        internal const val CAMERA_SCREEN_FRAGMENT_TAG = "CameraScreenFragmentTag"
         internal const val IMAGE_CROP_FRAGMENT_TAG = "ImageCropFragmentTag"
         internal const val IMAGE_PROCESSING_FRAGMENT_TAG = "ImageProcessingFragmentTag"
         internal const val ORIGINAL_IMAGE_NAME = "original"
@@ -121,6 +122,7 @@ abstract class InternalScanActivity : AppCompatActivity() {
         compressFiles()
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun compressFiles() {
         Log.d(TAG, "ZDCcompress starts ${System.currentTimeMillis()}")
         findViewById<ProgressView>(R.id.zdcProgressView).show()
@@ -133,7 +135,8 @@ abstract class InternalScanActivity : AppCompatActivity() {
 
             var transformedImageFile: File? = null
             transformedImage?.let {
-                transformedImageFile = File(filesDir, "${TRANSFORMED_IMAGE_NAME}.${imageType.extension()}")
+                transformedImageFile =
+                    File(filesDir, "${TRANSFORMED_IMAGE_NAME}.${imageType.extension()}")
                 saveBitmap(it, transformedImageFile!!, imageType, imageQuality)
             }
 
@@ -159,11 +162,15 @@ abstract class InternalScanActivity : AppCompatActivity() {
                 }
             }
 
-            val scannerResults = ScannerResults(originalImageFile, croppedImageFile, transformedImageFile)
+            val scannerResults =
+                ScannerResults(originalImageFile, croppedImageFile, transformedImageFile)
             runOnUiThread {
                 findViewById<ProgressView>(R.id.zdcProgressView).hide()
                 shouldCallOnClose = false
-                supportFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStackImmediate(
+                    null,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
                 shouldCallOnClose = true
                 onSuccess(scannerResults)
                 Log.d(TAG, "ZDCcompress ends ${System.currentTimeMillis()}")

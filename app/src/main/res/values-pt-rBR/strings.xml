@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ok_label">OK</string>
+    <string name="error_label">Erro</string>
+    <string name="photo_saved">Foto salva na Câmera</string>
+    <string name="save_photo">Salvar Foto</string>
+    <string name="scan_lib">Biblioteca de Digitalização</string>
+</resources>

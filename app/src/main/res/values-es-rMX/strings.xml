@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ok_label">OK</string>
+    <string name="error_label">Error</string>
+    <string name="photo_saved">La foto ha sido guardada en la Cámara</string>
+    <string name="save_photo">Guardar Foto</string>
+    <string name="scan_lib">Biblioteca de Escaneo</string>
+</resources>

@@ -32,7 +32,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.zynksoftware.documentscanner.R
-import java.util.*
 
 internal class PolygonView @JvmOverloads constructor(
     context: Context,
@@ -104,7 +103,7 @@ internal class PolygonView @JvmOverloads constructor(
         val outlinePoints: MutableMap<Int, PointF> = HashMap()
         outlinePoints[0] = PointF(screenXCenter - offsetWidth, screenYCenter - offsetHeight)
         outlinePoints[1] = PointF(screenXCenter + offsetWidth, screenYCenter - offsetHeight)
-        outlinePoints[2] = PointF(screenXCenter - offsetWidth , screenYCenter + offsetHeight)
+        outlinePoints[2] = PointF(screenXCenter - offsetWidth, screenYCenter + offsetHeight)
         outlinePoints[3] = PointF(screenXCenter + offsetWidth, screenYCenter + offsetHeight)
         return outlinePoints
     }
@@ -178,7 +177,8 @@ internal class PolygonView @JvmOverloads constructor(
 
     private fun getImageView(x: Int, y: Int): ImageView {
         val imageView = PolygonPointImageView(context, this)
-        val layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val layoutParams =
+            LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         imageView.layoutParams = layoutParams
         imageView.setImageResource(R.drawable.crop_corner_circle)
         imageView.setPadding(pointPadding, pointPadding, pointPadding, pointPadding)

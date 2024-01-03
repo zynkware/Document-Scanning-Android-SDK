@@ -7,12 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zynksoftware.documentscannersample.R
 import java.io.File
 
-class ImageAdapter(val context: Context?, var imageList: ArrayList<File>, var listener: ImageAdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ImageAdapter(
+    private val context: Context?,
+    private var imageList: ArrayList<File>,
+    private var listener: ImageAdapterListener
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
 
-        val view = layoutInflater.inflate(R.layout.image_preview_adapter, parent, false) as ViewGroup
+        val view =
+            layoutInflater.inflate(R.layout.image_preview_adapter, parent, false) as ViewGroup
         return ImageViewHolder(view)
     }
 

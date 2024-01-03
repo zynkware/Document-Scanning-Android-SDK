@@ -20,22 +20,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 package com.zynksoftware.documentscanner.ui.imageprocessing
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.zynksoftware.documentscanner.R
 import com.zynksoftware.documentscanner.common.extensions.rotateBitmap
+import com.zynksoftware.documentscanner.databinding.FragmentImageProcessingBinding
 import com.zynksoftware.documentscanner.ui.base.BaseFragment
 import com.zynksoftware.documentscanner.ui.scan.InternalScanActivity
-import kotlinx.android.synthetic.main.fragment_image_processing.*
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 internal class ImageProcessingFragment : BaseFragment() {
+    private lateinit var binding: FragmentImageProcessingBinding
 
     companion object {
         private val TAG = ImageProcessingFragment::class.simpleName
@@ -48,29 +53,34 @@ internal class ImageProcessingFragment : BaseFragment() {
 
     private var isInverted = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_image_processing, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentImageProcessingBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        imagePreview.setImageBitmap(getScanActivity().croppedImage)
+        binding.imagePreview.setImageBitmap(getScanActivity().croppedImage)
 
         initListeners()
     }
 
     private fun initListeners() {
-        closeButton.setOnClickListener {
+        binding.closeButton.setOnClickListener {
             closeFragment()
         }
-        confirmButton.setOnClickListener {
+        binding.confirmButton.setOnClickListener {
             selectFinalScannerResults()
         }
-        magicButton.setOnClickListener {
+        binding.magicButton.setOnClickListener {
             applyGrayScaleFilter()
         }
-        rotateButton.setOnClickListener {
+        binding.rotateButton.setOnClickListener {
             rotateImage()
         }
     }
@@ -79,22 +89,25 @@ internal class ImageProcessingFragment : BaseFragment() {
         return (requireActivity() as InternalScanActivity)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun rotateImage() {
         Log.d(TAG, "ZDCrotate starts ${System.currentTimeMillis()}")
         showProgressBar()
         GlobalScope.launch(Dispatchers.IO) {
-            if(isAdded) {
-                getScanActivity().transformedImage = getScanActivity().transformedImage?.rotateBitmap(ANGLE_OF_ROTATION)
-                getScanActivity().croppedImage = getScanActivity().croppedImage?.rotateBitmap(ANGLE_OF_ROTATION)
+            if (isAdded) {
+                getScanActivity().transformedImage =
+                    getScanActivity().transformedImage?.rotateBitmap(ANGLE_OF_ROTATION)
+                getScanActivity().croppedImage =
+                    getScanActivity().croppedImage?.rotateBitmap(ANGLE_OF_ROTATION)
             }
 
-            if(isAdded) {
+            if (isAdded) {
                 getScanActivity().runOnUiThread {
                     hideProgressBar()
                     if (isInverted) {
-                        imagePreview?.setImageBitmap(getScanActivity().transformedImage)
+                        binding.imagePreview.setImageBitmap(getScanActivity().transformedImage)
                     } else {
-                        imagePreview?.setImageBitmap(getScanActivity().croppedImage)
+                        binding.imagePreview.setImageBitmap(getScanActivity().croppedImage)
                     }
                 }
             }
@@ -106,28 +119,34 @@ internal class ImageProcessingFragment : BaseFragment() {
         getScanActivity().closeCurrentFragment()
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun applyGrayScaleFilter() {
         Log.d(TAG, "ZDCgrayscale starts ${System.currentTimeMillis()}")
         showProgressBar()
         GlobalScope.launch(Dispatchers.IO) {
-            if(isAdded) {
+            if (isAdded) {
                 if (!isInverted) {
-                    val bmpMonochrome = Bitmap.createBitmap(getScanActivity().croppedImage!!.width, getScanActivity().croppedImage!!.height, Bitmap.Config.ARGB_8888)
+                    val bmpMonochrome = Bitmap.createBitmap(
+                        getScanActivity().croppedImage!!.width,
+                        getScanActivity().croppedImage!!.height,
+                        Bitmap.Config.ARGB_8888
+                    )
                     val canvas = Canvas(bmpMonochrome)
                     val ma = ColorMatrix()
                     ma.setSaturation(0f)
                     val paint = Paint()
                     paint.colorFilter = ColorMatrixColorFilter(ma)
                     getScanActivity().croppedImage?.let { canvas.drawBitmap(it, 0f, 0f, paint) }
-                    getScanActivity().transformedImage = bmpMonochrome.copy(bmpMonochrome.config, true)
+                    getScanActivity().transformedImage =
+                        bmpMonochrome.copy(bmpMonochrome.config, true)
                     getScanActivity().runOnUiThread {
                         hideProgressBar()
-                        imagePreview.setImageBitmap(getScanActivity().transformedImage)
+                        binding.imagePreview.setImageBitmap(getScanActivity().transformedImage)
                     }
                 } else {
                     getScanActivity().runOnUiThread {
                         hideProgressBar()
-                        imagePreview.setImageBitmap(getScanActivity().croppedImage)
+                        binding.imagePreview.setImageBitmap(getScanActivity().croppedImage)
                         getScanActivity().transformedImage = null
                     }
                 }

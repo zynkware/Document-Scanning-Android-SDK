@@ -1,20 +1,20 @@
 /**
-    Copyright 2020 ZynkSoftware SRL
+Copyright 2020 ZynkSoftware SRL
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
-    associated documentation files (the "Software"), to deal in the Software without restriction,
-    including without limitation the rights to use, copy, modify, merge, publish, distribute,
-    sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-    The above copyright notice and this permission notice shall be included in all copies or
-    substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-    INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package com.zynksoftware.documentscanner.manager
@@ -22,6 +22,7 @@ package com.zynksoftware.documentscanner.manager
 import android.content.Context
 import android.graphics.Bitmap
 import id.zelory.compressor.extension
+import java.util.Locale
 
 internal class SessionManager(context: Context) {
 
@@ -32,7 +33,9 @@ internal class SessionManager(context: Context) {
 
         private const val DEFAULT_IMAGE_TYPE = "jpg"
     }
-    private val preferences = context.getSharedPreferences("ZDC_Shared_Preferences", Context.MODE_PRIVATE)
+
+    private val preferences =
+        context.getSharedPreferences("ZDC_Shared_Preferences", Context.MODE_PRIVATE)
 
 
     fun getImageSize(): Long {
@@ -59,7 +62,7 @@ internal class SessionManager(context: Context) {
         preferences.edit().putString(IMAGE_TYPE_KEY, type.extension()).apply()
     }
 
-    private fun compressFormat(format: String) = when (format.toLowerCase()) {
+    private fun compressFormat(format: String) = when (format.lowercase(Locale.getDefault())) {
         "png" -> Bitmap.CompressFormat.PNG
         "webp" -> Bitmap.CompressFormat.WEBP
         else -> Bitmap.CompressFormat.JPEG

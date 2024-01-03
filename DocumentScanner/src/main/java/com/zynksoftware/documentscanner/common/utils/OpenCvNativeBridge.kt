@@ -1,20 +1,20 @@
 /**
-    Copyright 2020 ZynkSoftware SRL
+Copyright 2020 ZynkSoftware SRL
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
-    associated documentation files (the "Software"), to deal in the Software without restriction,
-    including without limitation the rights to use, copy, modify, merge, publish, distribute,
-    sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-    The above copyright notice and this permission notice shall be included in all copies or
-    substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-    INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package com.zynksoftware.documentscanner.common.utils
@@ -25,11 +25,21 @@ import com.zynksoftware.documentscanner.common.extensions.scaleRectangle
 import com.zynksoftware.documentscanner.common.extensions.toBitmap
 import com.zynksoftware.documentscanner.common.extensions.toMat
 import com.zynksoftware.documentscanner.ui.components.Quadrilateral
-import org.opencv.core.*
+import org.opencv.core.Core
+import org.opencv.core.CvType
+import org.opencv.core.Mat
+import org.opencv.core.MatOfInt
+import org.opencv.core.MatOfPoint
+import org.opencv.core.MatOfPoint2f
+import org.opencv.core.Point
+import org.opencv.core.Scalar
+import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.math.*
+import java.util.Collections
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 
 internal class OpenCvNativeBridge {
@@ -49,7 +59,17 @@ internal class OpenCvNativeBridge {
         private const val FIRST_MAX_CONTOURS = 10
     }
 
-    fun getScannedBitmap(bitmap: Bitmap, x1: Float, y1: Float, x2: Float, y2: Float, x3: Float, y3: Float, x4: Float, y4: Float): Bitmap {
+    fun getScannedBitmap(
+        bitmap: Bitmap,
+        x1: Float,
+        y1: Float,
+        x2: Float,
+        y2: Float,
+        x3: Float,
+        y3: Float,
+        x4: Float,
+        y4: Float
+    ): Bitmap {
         val rectangle = MatOfPoint2f()
         rectangle.fromArray(
             Point(x1.toDouble(), y1.toDouble()),
@@ -73,7 +93,7 @@ internal class OpenCvNativeBridge {
         return result
     }
 
-    fun getPoint(bitmap: Bitmap): MatOfPoint2f? {
+    private fun getPoint(bitmap: Bitmap): MatOfPoint2f? {
         val src = bitmap.toMat()
 
         val ratio = DOWNSCALE_IMAGE_SIZE / max(src.width(), src.height())
@@ -92,16 +112,32 @@ internal class OpenCvNativeBridge {
 
         Core.normalize(src, src, NORMALIZATION_MIN_VALUE, NORMALIZATION_MAX_VALUE, Core.NORM_MINMAX)
 
-        Imgproc.threshold(src, src, TRUNCATE_THRESHOLD, NORMALIZATION_MAX_VALUE, Imgproc.THRESH_TRUNC)
+        Imgproc.threshold(
+            src,
+            src,
+            TRUNCATE_THRESHOLD,
+            NORMALIZATION_MAX_VALUE,
+            Imgproc.THRESH_TRUNC
+        )
         Core.normalize(src, src, NORMALIZATION_MIN_VALUE, NORMALIZATION_MAX_VALUE, Core.NORM_MINMAX)
 
         Imgproc.Canny(src, destination, CANNY_THRESHOLD_HIGH, CANNY_THRESHOLD_LOW)
 
-        Imgproc.threshold(destination, destination, CUTOFF_THRESHOLD, NORMALIZATION_MAX_VALUE, Imgproc.THRESH_TOZERO)
+        Imgproc.threshold(
+            destination,
+            destination,
+            CUTOFF_THRESHOLD,
+            NORMALIZATION_MAX_VALUE,
+            Imgproc.THRESH_TOZERO
+        )
 
         Imgproc.morphologyEx(
             destination, destination, Imgproc.MORPH_CLOSE,
-            Mat(Size(CLOSE_KERNEL_SIZE, CLOSE_KERNEL_SIZE), CvType.CV_8UC1, Scalar(NORMALIZATION_MAX_VALUE)),
+            Mat(
+                Size(CLOSE_KERNEL_SIZE, CLOSE_KERNEL_SIZE),
+                CvType.CV_8UC1,
+                Scalar(NORMALIZATION_MAX_VALUE)
+            ),
             Point(-1.0, -1.0), 1
         )
 
@@ -123,7 +159,7 @@ internal class OpenCvNativeBridge {
             if (approx.rows() == ANGLES_NUMBER) {
                 val foundPoints: Array<Point> = sortPoints(points)
                 return Quadrilateral(approx, foundPoints)
-            } else if(approx.rows() == 5) {
+            } else if (approx.rows() == 5) {
                 // if document has a bent corner
                 var shortestDistance = Int.MAX_VALUE.toDouble()
                 var shortestPoint1: Point? = null
@@ -141,7 +177,7 @@ internal class OpenCvNativeBridge {
                             shortestPoint1 = points[i]
                             shortestPoint2 = points[j]
                         }
-                        if(d > diagonal) {
+                        if (d > diagonal) {
                             diagonal = d
                             diagonalPoint1 = points[i]
                             diagonalPoint2 = points[j]
@@ -149,25 +185,56 @@ internal class OpenCvNativeBridge {
                     }
                 }
 
-                val trianglePointWithHypotenuse: Point? = points.toList().minus(arrayListOf(shortestPoint1, shortestPoint2, diagonalPoint1, diagonalPoint2))[0]
+                val trianglePointWithHypotenuse: Point? = points.toList().minus(
+                    arrayListOf(
+                        shortestPoint1,
+                        shortestPoint2,
+                        diagonalPoint1,
+                        diagonalPoint2
+                    ).toSet()
+                )[0]
 
-                val newPoint = if(trianglePointWithHypotenuse!!.x > shortestPoint1!!.x && trianglePointWithHypotenuse.x > shortestPoint2!!.x &&
-                    trianglePointWithHypotenuse.y > shortestPoint1.y && trianglePointWithHypotenuse.y > shortestPoint2.y) {
-                    Point(min(shortestPoint1.x, shortestPoint2.x), min(shortestPoint1.y, shortestPoint2.y))
-                } else if(trianglePointWithHypotenuse.x < shortestPoint1.x && trianglePointWithHypotenuse.x < shortestPoint2!!.x &&
-                    trianglePointWithHypotenuse.y > shortestPoint1.y && trianglePointWithHypotenuse.y > shortestPoint2.y) {
-                    Point(max(shortestPoint1.x, shortestPoint2.x), min(shortestPoint1.y, shortestPoint2.y))
-                } else if(trianglePointWithHypotenuse.x < shortestPoint1.x && trianglePointWithHypotenuse.x < shortestPoint2!!.x &&
-                        trianglePointWithHypotenuse.y < shortestPoint1.y && trianglePointWithHypotenuse.y < shortestPoint2.y) {
-                     Point(max(shortestPoint1.x, shortestPoint2.x), max(shortestPoint1.y, shortestPoint2.y))
-                } else if(trianglePointWithHypotenuse.x > shortestPoint1.x && trianglePointWithHypotenuse.x > shortestPoint2!!.x &&
-                    trianglePointWithHypotenuse.y < shortestPoint1.y && trianglePointWithHypotenuse.y < shortestPoint2.y) {
-                     Point(min(shortestPoint1.x, shortestPoint2.x), max(shortestPoint1.y, shortestPoint2.y))
-                } else {
-                    Point(0.0, 0.0)
-                }
+                val newPoint =
+                    if (trianglePointWithHypotenuse!!.x > shortestPoint1!!.x && trianglePointWithHypotenuse.x > shortestPoint2!!.x &&
+                        trianglePointWithHypotenuse.y > shortestPoint1.y && trianglePointWithHypotenuse.y > shortestPoint2.y
+                    ) {
+                        Point(
+                            min(shortestPoint1.x, shortestPoint2.x),
+                            min(shortestPoint1.y, shortestPoint2.y)
+                        )
+                    } else if (trianglePointWithHypotenuse.x < shortestPoint1.x && trianglePointWithHypotenuse.x < shortestPoint2!!.x &&
+                        trianglePointWithHypotenuse.y > shortestPoint1.y && trianglePointWithHypotenuse.y > shortestPoint2.y
+                    ) {
+                        Point(
+                            max(shortestPoint1.x, shortestPoint2.x),
+                            min(shortestPoint1.y, shortestPoint2.y)
+                        )
+                    } else if (trianglePointWithHypotenuse.x < shortestPoint1.x && trianglePointWithHypotenuse.x < shortestPoint2!!.x &&
+                        trianglePointWithHypotenuse.y < shortestPoint1.y && trianglePointWithHypotenuse.y < shortestPoint2.y
+                    ) {
+                        Point(
+                            max(shortestPoint1.x, shortestPoint2.x),
+                            max(shortestPoint1.y, shortestPoint2.y)
+                        )
+                    } else if (trianglePointWithHypotenuse.x > shortestPoint1.x && trianglePointWithHypotenuse.x > shortestPoint2!!.x &&
+                        trianglePointWithHypotenuse.y < shortestPoint1.y && trianglePointWithHypotenuse.y < shortestPoint2.y
+                    ) {
+                        Point(
+                            min(shortestPoint1.x, shortestPoint2.x),
+                            max(shortestPoint1.y, shortestPoint2.y)
+                        )
+                    } else {
+                        Point(0.0, 0.0)
+                    }
 
-                val sortedPoints = sortPoints(arrayOf(trianglePointWithHypotenuse, diagonalPoint1!!, diagonalPoint2!!, newPoint))
+                val sortedPoints = sortPoints(
+                    arrayOf(
+                        trianglePointWithHypotenuse,
+                        diagonalPoint1!!,
+                        diagonalPoint2!!,
+                        newPoint
+                    )
+                )
                 val newApprox = MatOfPoint2f()
                 newApprox.fromArray(*sortedPoints)
                 return Quadrilateral(newApprox, sortedPoints)
@@ -183,8 +250,10 @@ internal class OpenCvNativeBridge {
     private fun sortPoints(src: Array<Point>): Array<Point> {
         val srcPoints: ArrayList<Point> = ArrayList(src.toList())
         val result = arrayOf<Point?>(null, null, null, null)
-        val sumComparator: Comparator<Point> = Comparator<Point> { lhs, rhs -> (lhs.y + lhs.x).compareTo(rhs.y + rhs.x) }
-        val diffComparator: Comparator<Point> = Comparator<Point> { lhs, rhs -> (lhs.y - lhs.x).compareTo(rhs.y - rhs.x) }
+        val sumComparator: Comparator<Point> =
+            Comparator { lhs, rhs -> (lhs.y + lhs.x).compareTo(rhs.y + rhs.x) }
+        val diffComparator: Comparator<Point> =
+            Comparator { lhs, rhs -> (lhs.y - lhs.x).compareTo(rhs.y - rhs.x) }
 
         // top-left corner = minimal sum
         result[0] = Collections.min(srcPoints, sumComparator)
@@ -203,7 +272,13 @@ internal class OpenCvNativeBridge {
         val mHierarchy = Mat()
         val mContourList: List<MatOfPoint> = ArrayList()
         //finding contours - as we are sorting by area anyway, we can use RETR_LIST - faster than RETR_EXTERNAL.
-        Imgproc.findContours(inputMat, mContourList, mHierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE)
+        Imgproc.findContours(
+            inputMat,
+            mContourList,
+            mHierarchy,
+            Imgproc.RETR_LIST,
+            Imgproc.CHAIN_APPROX_SIMPLE
+        )
 
         // Convert the contours to their Convex Hulls i.e. removes minor nuances in the contour
         val mHullList: MutableList<MatOfPoint> = ArrayList()

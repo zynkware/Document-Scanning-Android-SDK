@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relativeRoot"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,7 +8,7 @@
         android:id="@+id/viewPagerTwo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomBar"/>
+        android:layout_above="@id/bottomBar" />
 
     <RelativeLayout
         android:id="@+id/bottomBar"
@@ -22,11 +21,11 @@
             android:id="@+id/previousButton"
             android:layout_width="@dimen/zdc_image_view_icons_dimens"
             android:layout_height="@dimen/zdc_image_view_icons_dimens"
-            android:padding="@dimen/zdc_x_small_padding"
-            android:layout_marginStart="@dimen/zdc_medium_padding"
             android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:src="@drawable/left_arrow"/>
+            android:layout_marginStart="@dimen/zdc_medium_padding"
+            android:padding="@dimen/zdc_x_small_padding"
+            android:src="@drawable/left_arrow"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/nextButton"
@@ -44,5 +43,5 @@
         android:id="@+id/progressLayoutApp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>
